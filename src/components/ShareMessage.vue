@@ -31,7 +31,7 @@ export default {
             alert("シェアしました");
             this.share = "";
             this.$router.go({
-              path: this$router.currentToute.path,
+              path: this.$router.currentToute.path,
               force: true,
             });
           });

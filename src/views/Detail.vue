@@ -7,7 +7,7 @@
       <div class="title">
         <p>ホーム</p>
       </div>
-      <Message/>
+      <Message :id="id"/>
       <div class="comment">
         <div class="comment-title">
           <p>コメント</p>
@@ -30,13 +30,41 @@
 <script>
 import SideNavi from "../components/SideNavi";
 import Message from "../components/Message";
+import axios from "axios";
 export default {
   props: ["id"],
   data() {
     return {
       content: "",
-      data: [{name: "太郎", like: [], share: "初めまして"}]
+      data: "",
     };
+  },
+  methods: {
+    send() {
+      axios
+        .post("ancient-woodland-76686.herokuapp.com/api/comment", {
+          share_id: this.id,
+          user_id: this.$store.state.user.id,
+          content: this.content,
+        })
+        .then((response) => {
+          this.content = "";
+          this.$router.go({
+            path: this.$router.currentRoute.path,
+            force: true,
+          });
+        });
+    },
+    comment() {
+      axios
+        .get("ancient-woodland-76686.herokuapp.com/api/shares" + this.id)
+        .then((response) => {
+          this.data = response.data.comment;
+        });
+    },
+  },
+  created() {
+    this.comment();
   },
   components: {
     SideNavi,

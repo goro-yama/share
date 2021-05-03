@@ -25,6 +25,7 @@
 <script>
 import SideNavi from "../components/SideNavi";
 import Message from "../components/Message";
+import axios from "axios";
 export default {
   data() {
     return {
@@ -32,6 +33,22 @@ export default {
       name: "太郎",
       profile: "私は太郎です"
     };
+  },
+  methods: {
+    edit() {
+      if (!this.active) {
+        axios
+          .put("herokuのURL/api/user", {
+            email: this.$store.state.user.email,
+            profile: this.profile,
+          })
+          .then((response) => {
+            this.$store.commit("changeUserData", this.profile);
+            console.log(response);
+          });
+      }
+      this.active = !this.active;
+    },
   },
   components: {
     SideNavi,
